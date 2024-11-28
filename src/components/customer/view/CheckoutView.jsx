@@ -1,0 +1,49 @@
+
+import { useState } from "react";
+import { PaginationContext } from "../../../context/PaginationContext";
+import Background from "../../common/Background";
+import { imageBackground } from "../../common/data";
+import Menu from "../../common/menu";
+
+import ModuleCheckout from "../module/ModuleCheckout";
+import Footer from "../../common/footer";
+
+
+
+function CheckoutView() {
+    const [noPage, setNoPage] = useState('');
+    const [totalPage, setTotalPage] = useState('');
+
+    return (
+
+        <div>
+            <div className="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
+                data-sidebar-position="fixed" data-header-position="fixed">
+                <Menu />
+                <Background imageBackground={imageBackground} />
+                <div className="" style={{ display: 'flex' }}>
+
+                    <div className="body-wrapper" style={{ marginLeft: '0px', flexGrow: 1 }} >
+
+                        <PaginationContext.Provider value={{ noPage, setNoPage, totalPage, setTotalPage }}>
+                            <ModuleCheckout />
+
+                        </PaginationContext.Provider>
+
+
+
+
+                    </div>
+                </div>
+                <Footer />
+
+
+
+
+
+            </div>
+        </div>
+
+
+    )
+} export default CheckoutView;
