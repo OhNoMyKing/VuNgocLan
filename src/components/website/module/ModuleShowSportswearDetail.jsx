@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import SportswearService from "../../service/SportswearService";
 import { PaginationContext } from "../../../context/PaginationContext";
 import Pagination from "../../common/Pagination";
-
+import Recommendations from "../module/ModuleShowRecommendation";
 function ModuleShowSportswearDetail() {
   const { sportswearId } = useParams();
   const [sportswears, setSportswears] = useState([]);
@@ -34,7 +34,7 @@ function ModuleShowSportswearDetail() {
 
   const fetchSportswear = async () => {
     try {
-      // const token = localStorage.getItem("token"); // Retrieve the token from localStorage
+      const token = localStorage.getItem("token"); // Retrieve the token from localStorage
       const response = await SportswearService.getSportswearByID(
         token,
         sportswearId
@@ -49,7 +49,7 @@ function ModuleShowSportswearDetail() {
   };
   const fetchUserReview = async () => {
     try {
-      // const token = localStorage.getItem("token"); // Retrieve the token from localStorage
+      const token = localStorage.getItem("token"); // Retrieve the token from localStorage
       const response = await SportswearService.getUserReviewBySportswearID(
         token,
         sportswearId,
@@ -116,7 +116,6 @@ function ModuleShowSportswearDetail() {
       console.error("Error fetching recommended products:", error);
     }
   };
-
   const [current, setCurrent] = useState(0);
   const [autoPlay, setAutoPlay] = useState(true);
   let timeOut = null;
@@ -154,7 +153,7 @@ function ModuleShowSportswearDetail() {
   const handleAddToCart = async (e) => {
     e.preventDefault();
     if (selectedSize === "") {
-      alert("Please select your size.");
+      alert("Bạn quên chưa chọn size rồi");
       return;
     }
     // Tạo đối tượng orderItemRequest
@@ -180,47 +179,44 @@ function ModuleShowSportswearDetail() {
       if (response.message === "oke") {
         // Giả sử API trả về 201 Created khi thành công
         // window.alert("Đã thêm vào giỏ hàng!");
-        alert("Đã thêm vào giỏ hàng 11!");
+        alert("Thêm thành công vào giỏ hàng");
       }
     } catch (error) {
       console.log("error");
     }
   };
-  //ham render
-  // Thêm vào bên dưới phần hiện tại hoặc trong phần render
-  const renderRelatedProducts = () => {
-    return (
-      <div className="related-products mt-5">
-        <h3 className="mb-4">Sản phẩm liên quan</h3>
-        <div className="row">
-          {recommendedProducts.map((product, index) => (
-            <div key={index} className="col-md-3 col-6 mb-4">
-              <div className="product-card">
-                <img
-                  src={product.main_image}
-                  alt={product.name}
-                  className="img-fluid rounded mb-2"
-                  style={{ height: "200px", objectFit: "cover" }}
-                />
-                <h6>{product.name}</h6>
-                <p>{product.price_vnd} VND</p>
-                <a
-                  href={`/home/detail/${product.id}`}
-                  className="btn btn-primary btn-sm"
-                >
-                  Xem chi tiết
-                </a>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-  };
-
+  // const renderRelatedProducts = () => {
+  //   return (
+  //     <div className="related-products mt-5">
+  //       <h3 className="mb-4">Sản phẩm liên quan</h3>
+  //       <div className="row">
+  //         {recommendedProducts.map((product, index) => (
+  //           <div key={index} className="col-md-3 col-6 mb-4">
+  //             <div className="product-card">
+  //               <img
+  //                 src={product.main_image}
+  //                 alt={product.name}
+  //                 className="img-fluid rounded mb-2"
+  //                 style={{ height: "200px", objectFit: "cover" }}
+  //               />
+  //               <h6>{product.name}</h6>
+  //               <p>{product.price_vnd} VND</p>
+  //               <a
+  //                 href={`/home/detail/${product.id}`}
+  //                 className="btn btn-primary btn-sm"
+  //               >
+  //                 Xem chi tiết
+  //               </a>
+  //             </div>
+  //           </div>
+  //         ))}
+  //       </div>
+  //     </div>
+  //   );
+  // };
   return (
     <div>
-      <div className="product-page">
+      <div className="product-page mt-5">
         <div className="container">
           {/* <div className="product-control">
                         <a href="#">Previous</a>
@@ -228,59 +224,66 @@ function ModuleShowSportswearDetail() {
                     </div> */}
           <div className="row">
             <div className="col-lg-6">
-              <div
-                className="carousel"
-                onMouseEnter={() => {
-                  setAutoPlay(false);
-                  clearTimeout(timeOut);
-                }}
-                onMouseLeave={() => {
-                  setAutoPlay(true);
-                }}
-              >
-                <div
-                  className="carousel_wrapper"
-                  style={{ width: "80%", height: "80%", margin: "auto" }}
-                >
-                  {relatedPhoto.map((image, index) => {
-                    return (
-                      /* (condition) ? true : false */
+              <div className="card w-100">
+                <div className="form-group card-body">
+                  <div
+                    className="carousel"
+                    onMouseEnter={() => {
+                      setAutoPlay(false);
+                      clearTimeout(timeOut);
+                    }}
+                    onMouseLeave={() => {
+                      setAutoPlay(true);
+                    }}
+                  >
+                    <div
+                      className="carousel_wrapper"
+                      style={{ width: "80%", height: "80%", margin: "auto" }}
+                    >
+                      {relatedPhoto.map((image, index) => {
+                        return (
+                          /* (condition) ? true : false */
 
-                      <div
-                        key={index}
-                        className={
-                          index == current
-                            ? "carousel_card carousel_card-active"
-                            : "carousel_card"
-                        }
-                      >
-                        <img className="card_image" src={image} alt="" />
-                        {/* <div className="card_overlay">
+                          <div
+                            key={index}
+                            className={
+                              index == current
+                                ? "carousel_card carousel_card-active"
+                                : "carousel_card"
+                            }
+                          >
+                            <img className="card_image" src={image} alt="" />
+                            {/* <div className="card_overlay">
                                                     <h2 className="card_title">{title}</h2>
                                                 </div> */}
+                          </div>
+                        );
+                      })}
+                      <div className="carousel_arrow_left" onClick={slideLeft}>
+                        &lsaquo;
                       </div>
-                    );
-                  })}
-                  <div className="carousel_arrow_left" onClick={slideLeft}>
-                    &lsaquo;
-                  </div>
-                  <div className="carousel_arrow_right" onClick={slideRight}>
-                    &rsaquo;
-                  </div>
-                  <div className="carousel_pagination">
-                    {relatedPhoto.map((_, index) => {
-                      return (
-                        <div
-                          key={index}
-                          className={
-                            index == current
-                              ? "pagination_dot pagination_dot-active"
-                              : "pagination_dot"
-                          }
-                          onClick={() => setCurrent(index)}
-                        ></div>
-                      );
-                    })}
+                      <div
+                        className="carousel_arrow_right"
+                        onClick={slideRight}
+                      >
+                        &rsaquo;
+                      </div>
+                      <div className="carousel_pagination">
+                        {relatedPhoto.map((_, index) => {
+                          return (
+                            <div
+                              key={index}
+                              className={
+                                index == current
+                                  ? "pagination_dot pagination_dot-active"
+                                  : "pagination_dot"
+                              }
+                              onClick={() => setCurrent(index)}
+                            ></div>
+                          );
+                        })}
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -310,138 +313,145 @@ function ModuleShowSportswearDetail() {
                             </div> */}
             </div>
             <div className="col-lg-6">
-              <div className="product-content">
-                <h2> {sportswears.name}</h2>
-                <div className="pc-meta">
-                  <h5>{sportswears.price_vnd}</h5>
-                  <div className="rating">
-                    <i className="fa fa-star"></i>
-                    <i className="fa fa-star"></i>
-                    <i className="fa fa-star"></i>
-                    <i className="fa fa-star"></i>
-                    <i className="fa fa-star"></i>
-                  </div>
-                </div>
-                <p>{sportswears.description}</p>
-                {/* <ul className="tags">
+              <div className="card w-100">
+                <div className="form-group card-body">
+                  <div className="product-content">
+                    <h2> {sportswears.name}</h2>
+                    <div className="pc-meta">
+                      <h5>{sportswears.price_vnd}</h5>
+                      <div className="rating">
+                        <i className="fa fa-star"></i>
+                        <i className="fa fa-star"></i>
+                        <i className="fa fa-star"></i>
+                        <i className="fa fa-star"></i>
+                        <i className="fa fa-star"></i>
+                      </div>
+                    </div>
+                    <p>{sportswears.description}</p>
+                    {/* <ul className="tags">
                                     <li><span>Category :</span> Men’s Wear</li>
                                     <li><span>Tags :</span> man, shirt, dotted, elegant, cool</li>
                                 </ul> */}
 
-                <div className="row mb-4">
-                  <div className="col-md-4 col-6">
-                    <label className="mb-2">Size</label>
-                    <select
-                      onChange={handleSizeChange}
-                      className="form-select "
-                      style={{ height: "35px" }}
-                      required
-                    >
-                      <option value="">Chọn Size</option>
-                      <option value="S">S</option>
-                      <option value="M">M</option>
-                      <option value="L">L</option>
-                      <option value="XL">XL</option>
-                      <option value="XXL">XXL</option>
-                    </select>
-                  </div>
-                </div>
-                <div className="product-quantity">
-                  <div className="pro-qty">
-                    <button
-                      className="btn btn-white  px-3"
-                      onClick={decreaseQuantity}
-                      disabled={quantity === 1}
-                    >
-                      <i className="fas fa-minus"></i>
-                    </button>
-                    <input min="1" value={quantity} />
-                    <button
-                      className="btn btn-white px-3"
-                      onClick={increaseQuantity}
-                    >
-                      <i className="fas fa-plus"></i>
-                    </button>
-                  </div>
-                </div>
-                <a className="primary-btn pc-btn" onClick={handleAddToCart}>
-                  Thêm vào giỏ hàng
-                </a>
+                    <div className="row mb-4">
+                      <div className="col-md-4 col-6">
+                        <label className="mb-2">Size</label>
+                        <select
+                          onChange={handleSizeChange}
+                          className="form-select "
+                          style={{ height: "35px" }}
+                          required
+                        >
+                          <option value="">Chọn Size</option>
+                          <option value="S">S</option>
+                          <option value="M">M</option>
+                          <option value="L">L</option>
+                          <option value="XL">XL</option>
+                          <option value="XXL">XXL</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div className="product-quantity">
+                      <div className="pro-qty">
+                        <button
+                          className="btn btn-white  px-3"
+                          onClick={decreaseQuantity}
+                          disabled={quantity === 1}
+                        >
+                          <i className="fas fa-minus"></i>
+                        </button>
+                        <input min="1" value={quantity} />
+                        <button
+                          className="btn btn-white px-3"
+                          onClick={increaseQuantity}
+                        >
+                          <i className="fas fa-plus"></i>
+                        </button>
+                      </div>
+                    </div>
+                    <a className="primary-btn pc-btn" onClick={handleAddToCart}>
+                      Thêm vào giỏ hàng
+                    </a>
 
-                {/* <ul className="p-info">
+                    {/* <ul className="p-info">
                                     <li>Product Information</li>
                                     <li>Reviews</li>
                                     <li>Product Care</li>
                                 </ul> */}
-              </div>
-            </div>
-            <div className="container mt-5">
-              {/* Hiển thị sản phẩm liên quan */}
-              {renderRelatedProducts()}
-            </div>
-            <div className="container mt-5">
-              <div className="row  d-flex justify-content-center">
-                <div className="col-md-12">
-                  <div className="headings d-flex justify-content-between align-items-center mb-3">
-                    <h5>Bình luận ({userReviewResponseList.length})</h5>
-
-                    <div className="buttons">
-                      <span className="badge bg-white d-flex flex-row align-items-center">
-                        {/* <span className="text-primary">Bình luận</span> */}
-                        {/* <div className="form-check form-switch">
-                                                    <input className="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked />
-
-                                                </div> */}
-                      </span>
-                    </div>
                   </div>
-                  {userReviewResponseList.map((item, index) => (
-                    <div>
-                      <div className="card p-3 mt-2">
-                        <div className="d-flex justify-content-between align-items-center">
-                          <div className="user d-flex flex-row align-items-center">
-                            <img
-                              src={item.main_image}
-                              style={{ width: "50px", height: "50px" }}
-                              className="user-img rounded-circle mr-2"
-                            />
-                            <span>
-                              <small className="font-weight-bold text-primary">
-                                {item.userName}
-                              </small>{" "}
-                              <small className="font-weight-bold">
-                                {item.comment}{" "}
-                              </small>
-                            </span>
-                          </div>
-
-                          <small>
-                            {item.time > 0
-                              ? item.time + " ngày trước"
-                              : "gần đây"}
-                          </small>
-                        </div>
-
-                        <div className="action d-flex justify-content-between mt-2 align-items-center">
-                          <div className="reply px-4"></div>
-
-                          <div className="icons align-items-center">
-                            {[...Array(item.rate)].map((_, index) => (
-                              <i
-                                key={index}
-                                className="fa fa-star text-warning"
-                              ></i>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                  {/* them mt-2 */}
                 </div>
               </div>
             </div>
+            {userReviewResponseList.length > 0 && (
+              <div>
+                <div className="container mt-5">
+                  <div className="row  d-flex justify-content-center">
+                    <div className="col-md-12">
+                      <div className="headings d-flex justify-content-between align-items-center mb-3">
+                        <h5>Bình luận ({userReviewResponseList.length})</h5>
+
+                        <div className="buttons">
+                          <span className="badge bg-white d-flex flex-row align-items-center">
+                            {/* <span className="text-primary">Bình luận</span> */}
+                            {/* <div className="form-check form-switch">
+                                                    <input className="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked />
+
+                                                </div> */}
+                          </span>
+                        </div>
+                      </div>
+                      {userReviewResponseList.map((item, index) => (
+                        <div>
+                          <div className="card p-3 mt-2">
+                            <div className="d-flex justify-content-between align-items-center">
+                              <div className="user d-flex flex-row align-items-center">
+                                <img
+                                  src={item.main_image}
+                                  style={{ width: "50px", height: "50px" }}
+                                  className="user-img rounded-circle mr-2"
+                                />
+                                <span>
+                                  <small className="font-weight-bold text-primary">
+                                    {item.userName}
+                                  </small>{" "}
+                                  <small className="font-weight-bold">
+                                    {item.comment}{" "}
+                                  </small>
+                                </span>
+                              </div>
+
+                              <small>
+                                {item.time > 0
+                                  ? item.time + " ngày trước"
+                                  : "gần đây"}
+                              </small>
+                            </div>
+
+                            <div className="action d-flex justify-content-between mt-2 align-items-center">
+                              <div className="reply px-4"></div>
+
+                              <div className="icons align-items-center">
+                                {[...Array(item.rate)].map((_, index) => (
+                                  <i
+                                    key={index}
+                                    className="fa fa-star text-warning"
+                                  ></i>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+
+                      {/* them mt-2 */}
+                      <Pagination />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
+          <Recommendations sportswearId={sportswearId} />
         </div>
       </div>
     </div>

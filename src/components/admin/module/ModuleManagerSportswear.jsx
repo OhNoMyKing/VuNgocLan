@@ -23,7 +23,6 @@ function ModuleManagerSportswear() {
     style: "currency",
     currency: "VND",
   });
-  // Kết nối WebSocket
   useEffect(() => {
     const uniqueId = Math.random().toString(36).substring(2, 15);
     const socket = new SockJS("http://localhost:8080/ws"); // Đảm bảo endpoint đúng
@@ -117,7 +116,7 @@ function ModuleManagerSportswear() {
                     className="container d-flex justify-content-center mt-50 mb-50"
                     style={{ marginTop: "50px" }}
                   >
-                    <div className="row">
+                    <div className="row container d-flex justify-content-center mt-50 mb-50">
                       <div className="row">
                         {sportswears.map((item) => (
                           <div className="card card-body" key={item.id}>
@@ -334,7 +333,7 @@ function ModuleManagerSportswear() {
                       </div>
                     </div>
                   </div>
-                  <Pagination />
+                  {totalPage > 1 && <Pagination />}
                 </div>
               </div>
             </div>

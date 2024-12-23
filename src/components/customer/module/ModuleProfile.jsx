@@ -3,29 +3,24 @@ import UserService from "../../service/UserService";
 import ModuleEditProfile from "./ModuleEditProfile";
 
 function ModuleProfile() {
-    const [userResponse, setUserResponse] = useState([]);
-    useEffect(() => {
-        // Fetch users data when the component mounts
-        fetchSportswear();
-    }, []);
-    const fetchSportswear = async () => {
-        try {
-
-            const token = localStorage.getItem('token');
-            const data = await UserService.getProflie(token) // Assuming the list of users is under the key 'ourUsersList'
-            setUserResponse(data)
-
-        } catch (error) {
-            console.log('Error fetching users:');
-        }
-    };
-    return (
-
-        <div className="container">
-            <div className="main-body">
-
-
-                {/* <nav aria-label="breadcrumb" className="main-breadcrumb">
+  const [userResponse, setUserResponse] = useState([]);
+  useEffect(() => {
+    // Fetch users data when the component mounts
+    fetchSportswear();
+  }, []);
+  const fetchSportswear = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const data = await UserService.getProflie(token); // Assuming the list of users is under the key 'ourUsersList'
+      setUserResponse(data);
+    } catch (error) {
+      console.log("Error fetching users:");
+    }
+  };
+  return (
+    <div className="container mt-5">
+      <div className="main-body">
+        {/* <nav aria-label="breadcrumb" className="main-breadcrumb">
                     <ol className="breadcrumb">
                         <li className="breadcrumb-item"><a href="index.html">Home</a></li>
                         <li className="breadcrumb-item"><a href="javascript:void(0)">User</a></li>
@@ -33,24 +28,30 @@ function ModuleProfile() {
                     </ol>
                 </nav> */}
 
-
-                <div className="row gutters-sm">
-                    <div className="col-md-4 mb-3">
-                        <div className="card">
-                            <div className="card-body">
-                                <div className="d-flex flex-column align-items-center text-center">
-                                    <img src={userResponse.main_image} alt="Admin" className="rounded-circle" style={{ width: '150px', height: '150px' }} />
-                                    <div className="mt-3">
-                                        <h4>{userResponse.first_name}_{userResponse.last_name}</h4>
-                                        {/* <p className="text-secondary mb-1">Full Stack Developer</p>
+        <div className="row gutters-sm">
+          <div className="col-md-4 mb-3">
+            <div className="card">
+              <div className="card-body">
+                <div className="d-flex flex-column align-items-center text-center">
+                  <img
+                    src={userResponse.main_image}
+                    alt=""
+                    className="rounded-circle"
+                    style={{ width: "150px", height: "150px" }}
+                  />
+                  <div className="mt-3">
+                    <h4>
+                      {userResponse.firstName} {userResponse.lastName}
+                    </h4>
+                    {/* <p className="text-secondary mb-1">Full Stack Developer</p>
                                         <p className="text-muted font-size-sm">Bay Area, San Francisco, CA</p>
                                         <button className="btn btn-primary">Follow</button>
                                         <button className="btn btn-outline-primary">Message</button> */}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        {/* <div className="card mt-3">
+                  </div>
+                </div>
+              </div>
+            </div>
+            {/* <div className="card mt-3">
                             <ul className="list-group list-group-flush">
                                 <li className="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                     <h6 className="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="feather feather-globe mr-2 icon-inline"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>Website</h6>
@@ -74,38 +75,38 @@ function ModuleProfile() {
                                 </li>
                             </ul>
                         </div> */}
-                    </div>
-                    <div className="col-md-8">
-                        <div className="card mb-3">
-                            <div className="card-body">
-                                <div className="row">
-                                    <div className="col-sm-3">
-                                        <h6 className="mb-0">Full Name</h6>
-                                    </div>
-                                    <div className="col-sm-9 text-secondary">
-                                        {userResponse.first_name}_{userResponse.last_name}
-                                    </div>
-                                </div>
-                                <hr />
-                                <div className="row">
-                                    <div className="col-sm-3">
-                                        <h6 className="mb-0">Email</h6>
-                                    </div>
-                                    <div className="col-sm-9 text-secondary">
-                                        {userResponse.email}
-                                    </div>
-                                </div>
-                                <hr />
-                                <div className="row">
-                                    <div className="col-sm-3">
-                                        <h6 className="mb-0">Phone</h6>
-                                    </div>
-                                    <div className="col-sm-9 text-secondary">
-                                        {userResponse.phone}
-                                    </div>
-                                </div>
-                                <hr />
-                                {/* <div className="row">
+          </div>
+          <div className="col-md-8">
+            <div className="card mb-3">
+              <div className="card-body">
+                <div className="row">
+                  <div className="col-sm-3">
+                    <h6 className="mb-0">Full Name</h6>
+                  </div>
+                  <div className="col-sm-9 text-secondary">
+                    {userResponse.firstName}_{userResponse.lastName}
+                  </div>
+                </div>
+                <hr />
+                <div className="row">
+                  <div className="col-sm-3">
+                    <h6 className="mb-0">Email</h6>
+                  </div>
+                  <div className="col-sm-9 text-secondary">
+                    {userResponse.email}
+                  </div>
+                </div>
+                <hr />
+                <div className="row">
+                  <div className="col-sm-3">
+                    <h6 className="mb-0">Phone</h6>
+                  </div>
+                  <div className="col-sm-9 text-secondary">
+                    {userResponse.phone}
+                  </div>
+                </div>
+                <hr />
+                {/* <div className="row">
                                     <div className="col-sm-3">
                                         <h6 className="mb-0">Mobile</h6>
                                     </div>
@@ -114,24 +115,24 @@ function ModuleProfile() {
                                     </div>
                                 </div>
                                 <hr /> */}
-                                <div className="row">
-                                    <div className="col-sm-3">
-                                        <h6 className="mb-0">Address</h6>
-                                    </div>
-                                    <div className="col-sm-9 text-secondary">
-                                        {userResponse.address}
-                                    </div>
-                                </div>
-                                <hr />
-                                <div className="row">
-                                    <div className="col-sm-12">
-                                        <ModuleEditProfile userResponseView={userResponse} />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                <div className="row">
+                  <div className="col-sm-3">
+                    <h6 className="mb-0">Address</h6>
+                  </div>
+                  <div className="col-sm-9 text-secondary">
+                    {userResponse.address}
+                  </div>
+                </div>
+                <hr />
+                <div className="row">
+                  <div className="col-sm-12">
+                    <ModuleEditProfile userResponseView={userResponse} />
+                  </div>
+                </div>
+              </div>
+            </div>
 
-                        {/* <div className="row gutters-sm">
+            {/* <div className="row gutters-sm">
                             <div className="col-sm-6 mb-3">
                                 <div className="card h-100">
                                     <div className="card-body">
@@ -187,20 +188,10 @@ function ModuleProfile() {
                                 </div>
                             </div>
                         </div> */}
-
-
-
-                    </div>
-                </div>
-
-            </div>
+          </div>
         </div>
-
-
-
-
-
-
-    )
+      </div>
+    </div>
+  );
 }
 export default ModuleProfile;

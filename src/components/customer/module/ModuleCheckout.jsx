@@ -2,12 +2,17 @@ import { useContext, useEffect, useState } from "react";
 import CartService from "../../service/CartService";
 import { PaginationContext } from "../../../context/PaginationContext";
 import Pagination from "../../common/Pagination";
+import { useNavigate } from "react-router-dom";
 
 function ModuleCheckout() {
   const { noPage, setNoPage, totalPage, setTotalPage } =
     useContext(PaginationContext);
   const [checkoutResponse, setCheckoutResponse] = useState([]);
   const [shippingFee, setShippingFee] = useState(0);
+  const [payment, setPayment] = useState("");
+  const navigate = useNavigate();
+  const [shipment, setShipment] = useState("");
+
   const formatter = new Intl.NumberFormat("vi-VN", {
     style: "currency",
     currency: "VND",
@@ -29,8 +34,19 @@ function ModuleCheckout() {
           (item) => item.id === parseInt(value)
         );
         setShippingFee(selectedShipping.shippingFee);
+        setShipment(value);
       } else {
         setShippingFee(0);
+      }
+    }
+    if (name === "payment_id") {
+      if (value !== "Choose Payment") {
+        console.log(value);
+        const selectedShipping = checkoutResponse.shippingResponseList.find(
+          (item) => item.id === parseInt(value)
+        );
+        setShippingFee(selectedShipping.shippingFee);
+        setPayment(value);
       }
     }
 
@@ -40,40 +56,39 @@ function ModuleCheckout() {
     fetchSportswear();
   }, [noPage, totalPage]);
 
-  // const fetchSportswear = async () => {
-  //     try {
-
-  //         const token = localStorage.getItem('token');
-  //         const response = await CartService.getCheckout(token, noPage)
-  //         setNoPage(response.currentPage)
-  //         setTotalPage(response.totalPage) // Assuming the list of users is under the key 'ourUsersList'
-
-  //         setCheckoutResponse(response)
-  //         setOrders({ ...orders, cartID: response.cartID });
-
-  //     } catch (error) {
-  //         console.log('Error fetching users:');
-  //     }
-  // };
   const fetchSportswear = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await CartService.initiatePayment(token, 237008, "NCB");
-      // In kết quả trả về từ API
-      console.log(`checkout: ${response}`);
+      const response = await CartService.getCheckout(token, noPage);
+      setNoPage(response.currentPage);
+      setTotalPage(response.totalPage); // Assuming the list of users is under the key 'ourUsersList'
+
+      setCheckoutResponse(response);
+      setOrders({ ...orders, cartID: response.cartID });
     } catch (error) {
       console.log("Error fetching users:");
     }
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (shipment === "") {
+      alert("Bạn quên chưa chọn Shipment");
+      return;
+    }
+    if (payment === "") {
+      alert("Bạn quên chưa chọn Payment");
+      return;
+    }
+
     console.log(orders);
     try {
       const token = localStorage.getItem("token");
       const response = await CartService.createOrders(token, orders);
       if (response.message === "oke") {
         // Giả sử API trả về 201 Created khi thành công
-        window.alert("Đặt hàng thành công!");
+        // window.alert("Đặt hàng thành công!");
+        window.confirm("Đặt hàng thành công!");
+        navigate("/cart-user");
       }
       if (response.message === "wrong") {
         // Giả sử API trả về 201 Created khi thành công
@@ -102,6 +117,7 @@ function ModuleCheckout() {
                       id="name"
                       name="fullName"
                       onChange={handleChange}
+                      required
                     />
                   </div>
                 </div>
@@ -114,6 +130,7 @@ function ModuleCheckout() {
                       id="name"
                       name="address"
                       onChange={handleChange}
+                      required
                     />
                   </div>
                 </div>
@@ -126,6 +143,7 @@ function ModuleCheckout() {
                       id="name"
                       name="phone"
                       onChange={handleChange}
+                      required
                     />
                   </div>
                 </div>
@@ -138,6 +156,7 @@ function ModuleCheckout() {
                         className="form-select"
                         name="shipping_id"
                         onChange={handleChange}
+                        required
                       >
                         <option>Choose Shipment</option>
                         {checkoutResponse.shippingResponseList &&
@@ -160,6 +179,7 @@ function ModuleCheckout() {
                         className="form-select"
                         name="payment_id"
                         onChange={handleChange}
+                        required
                       >
                         <option>Choose Payment</option>
                         {checkoutResponse.paymentResponseList &&
@@ -270,7 +290,7 @@ function ModuleCheckout() {
                             </div>
                           )
                         )}
-                      <Pagination />
+                      {totalPage > 1 && <Pagination />}
                     </div>
                   </div>
                 </div>

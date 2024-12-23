@@ -9,38 +9,39 @@ import Menu from "../../common/menu";
 import ModuleShowSportswearDetail from "../module/ModuleShowSportswearDetail";
 import Pagination from "../../common/Pagination";
 
-
-
 function SportswearDetailView() {
-    const [noPage, setNoPage] = useState('');
-    const [totalPage, setTotalPage] = useState('');
-    return (
-        <div>
-            <div className="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
-                data-sidebar-position="fixed" data-header-position="fixed">
-                <Menu />
-                <Background imageBackground={imageBackground} />
+  const [noPage, setNoPage] = useState("");
+  const [totalPage, setTotalPage] = useState("");
+  return (
+    <div>
+      <div
+        className="page-wrapper"
+        id="main-wrapper"
+        data-layout="vertical"
+        data-navbarbg="skin6"
+        data-sidebartype="full"
+        data-sidebar-position="fixed"
+        data-header-position="fixed"
+      >
+        <Menu />
+        <Background imageBackground={imageBackground} />
 
-                <div className="" style={{ display: 'flex' }}>
-                    {/* <Left /> */}
-                    <div className="body-wrapper" style={{ marginLeft: '0px', flexGrow: 1 }} >
-
-                        <PaginationContext.Provider value={{ noPage, setNoPage, totalPage, setTotalPage }}>
-                            <ModuleShowSportswearDetail />
-                            <Pagination />
-                        </PaginationContext.Provider>
-
-
-                    </div>
-                </div>
-                <Footer />
-            </div>
-
-
-
-
-
+        <div className="" style={{ display: "flex" }}>
+          {/* <Left /> */}
+          <div
+            className="body-wrapper"
+            style={{ marginLeft: "0px", flexGrow: 1 }}
+          >
+            <PaginationContext.Provider
+              value={{ noPage, setNoPage, totalPage, setTotalPage }}
+            >
+              <ModuleShowSportswearDetail />
+            </PaginationContext.Provider>
+          </div>
         </div>
-    )
+        <Footer />
+      </div>
+    </div>
+  );
 }
 export default SportswearDetailView;

@@ -122,77 +122,74 @@ function ModuleCart() {
 
   return (
     <div style={{ marginTop: "30px" }}>
-      {totalPage > 0 ? (
-        <div className="cart-page">
-          <div className="container">
+      {totalPage > 0 && (
+        <div className="cart-page mb-5">
+          <div
+            className="container"
+            style={{ boxShadow: "0px 8px 20px 0px rgba(0, 0, 0, 0.15)" }}
+          >
             <div className="cart-table">
               <table>
-                <thead>
+                <thead className="card-header">
                   <tr>
                     <th className="product-h">Sản phẩm</th>
                     <th>Giá</th>
-                    <th>Số lượng</th>
-                    <th>Giảm giá</th>
+                    <th className="quan">Số lượng</th>
                     <th>Tổng tiền</th>
                     <th></th>
                   </tr>
                 </thead>
-                <tbody>
-                  {cartResponse.cartItemResponseList?.map((item, index) => (
-                    <tr key={index}>
-                      <td className="product-col">
-                        <img src={item.image} alt="" />
-                        <div className="p-title">
-                          <h5>{item.sportswear_name}</h5>
-                        </div>
-                      </td>
-                      <td className="price-col">
-                        {formatter.format(item.price)}
-                      </td>
-                      <td className="quantity-col">
-                        <div className="pro-qty">
+                <tbody className="card-body">
+                  {cartResponse.cartItemResponseList &&
+                    cartResponse.cartItemResponseList.map((item, index) => (
+                      <tr
+                        key={index}
+                        style={{
+                          boxShadow: "0px 8px 20px 0px rgba(11, 179, 81, 0.15)",
+                        }}
+                      >
+                        <td className="product-col">
+                          <img src={item.image} alt="" />
+                          <div className="p-title">
+                            <h5>{item.sportswear_name}</h5>
+                          </div>
+                        </td>
+                        <td className="price-col">
+                          {formatter.format(item.price)}
+                        </td>
+                        <td className="quantity-col">
+                          <div className="pro-qty">
+                            <button
+                              className="btn btn-white  px-3"
+                              onClick={() => decreaseQuantity(index)}
+                              disabled={item.quantity === 1}
+                            >
+                              <i className="fas fa-minus"></i>
+                            </button>
+                            <input type="text" value={item.quantity} />
+                            <button
+                              className="btn btn-white px-3"
+                              onClick={() => increaseQuantity(index)}
+                            >
+                              <i className="fas fa-plus"></i>
+                            </button>
+                          </div>
+                        </td>
+                        <td className="total">
+                          {formatter.format(item.totalAmount)}
+                        </td>
+                        <td className="product-close">
                           <button
                             className="btn btn-white px-3"
-                            onClick={() => decreaseQuantity(index)}
-                            disabled={item.quantity === 1}
+                            onClick={() => deleteByID(index)}
                           >
-                            <i className="fas fa-minus"></i>
+                            <i className="fa-solid fa-trash"></i>
                           </button>
-                          <input type="text" value={item.quantity} readOnly />
-                          <button
-                            className="btn btn-white px-3"
-                            onClick={() => increaseQuantity(index)}
-                          >
-                            <i className="fas fa-plus"></i>
-                          </button>
-                        </div>
-                      </td>
-                      <td>{formatter.format(item.discountAmount || 0)}</td>
-                      <td>
-                        {formatter.format(
-                          item.totalAmount - (item.discountAmount || 0)
-                        )}
-                      </td>
-                      <td>
-                        <button
-                          className="btn btn-white px-3"
-                          onClick={() => deleteByID(index)}
-                        >
-                          <i className="fa-solid fa-trash"></i>
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
+                        </td>
+                      </tr>
+                    ))}
                 </tbody>
               </table>
-            </div>
-
-            <div className="cart-summary">
-              <p>Tổng giảm giá: {formatter.format(totalDiscount)}</p>
-              <p>
-                Tổng tiền sau giảm giá:{" "}
-                {formatter.format(cartResponse.totalAmount - totalDiscount)}
-              </p>
             </div>
 
             <div className="cart-btn">
@@ -212,45 +209,52 @@ function ModuleCart() {
                   </div>
                 </div>
                 <div className="col-lg-5 offset-lg-1 text-left text-lg-right">
-                  <button className="site-btn clear-btn" onClick={clearCart}>
+                  <div
+                    className="site-btn clear-btn btn-success"
+                    onClick={clearCart}
+                  >
                     Xóa tất cả
-                  </button>
+                  </div>
                   <Link
-                    to="/checkout"
+                    to={"/checkout"}
                     className="site-btn update-btn btn-warning"
                   >
                     Tiến hành đặt hàng
                   </Link>
                 </div>
               </div>
-              <Pagination />
+
+              {totalPage > 1 && <Pagination />}
             </div>
           </div>
         </div>
-      ) : (
-        <div className="container-fluid mt-100">
-          <div className="row">
-            <div className="col-md-12">
-              <div className="card">
-                <div className="card-body cart">
-                  <div className="col-sm-12 empty-cart-cls text-center">
-                    <img
-                      src="https://i.imgur.com/dCdflKN.png"
-                      width="130"
-                      height="130"
-                      className="img-fluid mb-4 mr-3"
-                      alt="Empty Cart"
-                    />
-                    <h3>
-                      <strong>Giỏ hàng của bạn đang rỗng</strong>
-                    </h3>
-                    <h4>Thêm vài sản phẩm để tiếp tục.</h4>
-                    <Link
-                      to="/home"
-                      className="btn btn-primary cart-btn-transform m-3"
-                    >
-                      Tiếp tục mua sắm
-                    </Link>
+      )}
+      {totalPage === 0 && (
+        <div>
+          <div className="container-fluid  mt-100">
+            <div className="row">
+              <div className="col-md-12">
+                <div className="card">
+                  <div className="card-body cart">
+                    <div className="col-sm-12 empty-cart-cls text-center">
+                      <img
+                        src="https://i.imgur.com/dCdflKN.png"
+                        width="130"
+                        height="130"
+                        className="img-fluid mb-4 mr-3"
+                      />
+                      <h3>
+                        <strong>Giỏ hàng của bạn đang rỗng</strong>
+                      </h3>
+                      <h4>Thêm vài cái áo đi</h4>
+                      <a
+                        href="/home"
+                        className="btn btn-primary cart-btn-transform m-3"
+                        data-abc="true"
+                      >
+                        Tiếp tục mua sắm
+                      </a>
+                    </div>
                   </div>
                 </div>
               </div>

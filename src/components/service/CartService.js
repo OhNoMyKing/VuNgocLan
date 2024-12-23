@@ -19,7 +19,7 @@ class CartService {
   static async initiatePayment(token, amount, bankCode) {
     try {
       const response = await axios.get(
-        `${CartService.BASE_URL}/api/v1/payment/vnpay?amount=${amount}&bankCode=${bankCode}`,
+        `${CartService.BASE_URL}/hello/vnpay?amount=${amount}&bankCode=${bankCode}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
